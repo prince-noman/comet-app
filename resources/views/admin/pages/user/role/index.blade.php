@@ -2,10 +2,6 @@
 
 @section('main')
 
-@extends('admin.layouts.app')
-
-@section('main')
-
 <div class="row">
     <div class="col-lg-8">
         <div class="card">
@@ -32,12 +28,21 @@
                                 <td>{{ $loop->index+1 }}</td>
                                 <td>{{ $role->name }}</td>
                                 <td>{{ $role->slug }}</td>
-                                <td>{{ $role->permissions }}</td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                       @forelse (json_decode($role->permissions) as $item)
+                                           <li><i class="fa fa-angle-right mr-2"></i>{{ $item }}</li>
+                                       @empty
+                                       <li>No Permission found</li>
+                                       @endforelse
+                                        
+                                    </ul>
+                                </td>
                                 <td>{{ $role->created_at->diffForHumans() }}</td>
                                 <td>
                                     {{-- <a href="" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a> --}}
-                                    <a href="{{ route('permission.edit', $role->id) }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
-                                    <form class="d-inline" action="{{ route('permission.destroy', $role->id) }}" method="POST">
+                                    <a href="{{ route('role.edit', $role->id) }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                    <form class="d-inline delete-form" action="{{ route('role.destroy', $role->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
@@ -77,7 +82,7 @@
                        <ul style="list-style: none; padding-left: 0px;">
                         @forelse ($permissions as $item)
                         <li>
-                            <label for=""><input type="checkbox">{{ $item->name }}</label>
+                            <label for=""><input name="permission[]" value="{{ $item->name }}" type="checkbox">{{ $item->name }}</label>
                         </li>
                         @empty
                         <li>
@@ -95,22 +100,34 @@
         </div>
     </div>
     @endif
-    {{-- @if($form_type == 'edit')
+    @if($form_type == 'edit')
     <div class="col-md-4">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
-                <h4 class="card-title">Edit permission</h4>
-                <a href="{{ route('permission.index') }}" class="btn btn-sm btn-info">Back</a>
+                <h4 class="card-title">Edit Role</h4>
+                <a href="{{ route('role.index') }}" class="btn btn-sm btn-info">Back</a>
             </div>
             <div class="card-body">
                 @include('validate')
-                <form action="{{ route('permission.update', $edit->id) }}" method="POST">
+                <form action="{{ route('role.update', $edit->id) }}" method="POST">
                     @csrf
                     @method('PATCH')
                     <div class="form-group">
                         <label>Name</label>
                         <input name="name" value="{{ $edit->name }}" type="text" class="form-control">
                     </div>
+
+                    <ul class="list-unstyled">
+                        @forelse ($permissions as $item)
+                        <li>
+                            <label for=""><input name="permission[]" @if(in_array($item->name, json_decode($edit->permissions))) checked @endif value="{{ $item->name }}" type="checkbox">{{ $item->name }}</label>
+                        </li>
+                        @empty
+                        <li>
+                            <label for="">No records found.</label>
+                        </li>
+                        @endforelse
+                       </ul>
                     
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary">Update</button>
@@ -119,9 +136,7 @@
             </div>
         </div>
     </div>
-    @endif --}}
+    @endif
 </div>
 
-@endsection
-
-@endsection
+@endsection 
