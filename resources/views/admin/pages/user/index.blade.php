@@ -29,7 +29,7 @@
                                 <tr>
                                     <td>{{ $loop->index+1 }}</td>
                                     <td>{{ $admin->name }}</td>
-                                    <td>{{ $admin->role_id }}</td>
+                                    <td>{{ $admin->role->name }}</td>
                                     <td>
                                         @if ($admin->photo == 'avatar.png')
                                             <img style="height: 50px; width: 50px; object-fit:cover" src="{{ asset('storage/admins/avatar.png') }}" alt="">

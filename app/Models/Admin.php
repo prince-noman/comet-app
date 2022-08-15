@@ -9,4 +9,9 @@ class Admin extends User {
     use HasFactory;
 
     protected $guarded = [];
+
+    //Get user role
+    public function role() {
+        return $this->belongsTo( Role::class, 'role_id', 'id' );
+    }
 }

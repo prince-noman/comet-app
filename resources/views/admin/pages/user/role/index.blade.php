@@ -19,6 +19,7 @@
                                 <th>Slug</th>
                                 <th>Permissions</th>
                                 <th>Created At</th>
+                                <th>Users</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -39,6 +40,17 @@
                                     </ul>
                                 </td>
                                 <td>{{ $role->created_at->diffForHumans() }}</td>
+                                {{-- <td>{{ $role->users }}</td> --}}
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @forelse (json_decode($role->users) as $role_users)
+                                            <li><i class="fa fa-angle-right mr-2"></i>{{ $role_users->name }}</li>
+                                        @empty
+                                        <li>No Users found</li>
+                                        @endforelse
+                                         
+                                     </ul>
+                                </td>
                                 <td>
                                     {{-- <a href="" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a> --}}
                                     <a href="{{ route('role.edit', $role->id) }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
