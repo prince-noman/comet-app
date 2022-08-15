@@ -2,10 +2,6 @@
 
 @section('main')
 
-@extends('admin.layouts.app')
-
-@section('main')
-
 <div class="row">
     <div class="col-lg-8">
         <div class="card">
@@ -23,6 +19,7 @@
                                 <th>Role</th>
                                 <th>Photo</th>
                                 <th>Created At</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -39,6 +36,15 @@
                                         @endif
                                     </td>
                                     <td>{{ $admin->created_at->diffForHumans() }}</td>
+                                    <td>
+                                        @if ($admin->status)
+                                            <span class="badge badge-success">Active User</span>
+                                            <a href="{{ route('admin.status.update', $admin->id) }}" class="text-danger"><i class="fa fa-times"></i></a>
+                                        @else
+                                            <span class="badge badge-danger">Blocked User</span>
+                                            <a href="{{ route('admin.status.update', $admin->id) }}" class="text-success"><i class="fa fa-check"></i></a>
+                                        @endif
+                                    </td>
                                     <td>
                                         {{-- <a href="" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a> --}}
                                         <a href="{{ route('permission.edit', $admin->id) }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
@@ -134,7 +140,5 @@
     </div>
     @endif --}}
 </div>
-
-@endsection
 
 @endsection

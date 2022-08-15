@@ -105,4 +105,26 @@ class AdminController extends Controller {
     public function destroy( $id ) {
         //
     }
+
+    /**
+     * Status Update
+     */
+
+    public function updateStatus( $id ) {
+        $data = Admin::findOrFail( $id );
+
+        if ( $data->status ) {
+            $data->update( [
+                'status' => false,
+            ] );
+        } else {
+            $data->update( [
+                'status' => true,
+            ] );
+        }
+
+        return back()->with( 'success-main', 'Status updated successfully' );
+
+    }
+
 }
