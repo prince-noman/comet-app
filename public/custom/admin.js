@@ -10,5 +10,8 @@
                 e.preventDefault();
             }
         });
+
+        //Data table JS
+        $(".data-table-comet").DataTable();
     });
 })(jQuery);

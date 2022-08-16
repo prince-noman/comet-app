@@ -12,7 +12,7 @@
             <div class="card-body">
                 @include('validate-main')
                 <div class="table-responsive">
-                    <table class="table mb-0">
+                    <table class="table mb-0 data-table-comet">
                         <thead>
                             <tr>
                                 <th>#</th>
