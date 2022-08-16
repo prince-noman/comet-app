@@ -40,7 +40,6 @@
                                     </ul>
                                 </td>
                                 <td>{{ $role->created_at->diffForHumans() }}</td>
-                                {{-- <td>{{ $role->users }}</td> --}}
                                 <td>
                                     <ul class="list-unstyled">
                                         @forelse (json_decode($role->users) as $role_users)

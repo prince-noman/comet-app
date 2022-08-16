@@ -6,8 +6,8 @@
     <div class="col-lg-8">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
-                <h4 class="card-title">All Admin Users</h4>
-                <a href="{{ route('admin.trash') }}" class="btn btn-danger">Trash Users <i class="fa fa-arrow-right"></i> </a>
+                <h4 class="card-title">All Admin Trashed Users</h4>
+                <a href="{{ route('admin-user.index') }}" class="btn btn-danger"><i class="fa fa-arrow-left"> Published Users </i> </a>
             </div>
             <div class="card-body">
                 @include('validate-main')
@@ -17,10 +17,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
-                                <th>Role</th>
                                 <th>Photo</th>
-                                <th>Created At</th>
-                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -30,32 +27,20 @@
                                 <tr>
                                     <td>{{ $loop->index+1 }}</td>
                                     <td>{{ $admin->name }}</td>
-                                    <td>{{ $admin->role->name }}</td>
                                     <td>
                                         @if ($admin->photo == 'avatar.png')
                                             <img style="height: 50px; width: 50px; object-fit:cover" src="{{ asset('storage/admins/avatar.png') }}" alt="">
                                         @endif
                                     </td>
-                                    <td>{{ $admin->created_at->diffForHumans() }}</td>
-                                    <td>
-                                        @if ($admin->status)
-                                            <span class="badge badge-success">Active User</span>
-                                            <a href="{{ route('admin.status.update', $admin->id) }}" class="text-danger"><i class="fa fa-times"></i></a>
-                                        @else
-                                            <span class="badge badge-danger">Blocked User</span>
-                                            <a href="{{ route('admin.status.update', $admin->id) }}" class="text-success"><i class="fa fa-check"></i></a>
-                                        @endif
-                                    </td>
                                     <td>
                                         {{-- <a href="" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a> --}}
-                                        <a href="{{ route('permission.edit', $admin->id) }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
-                                        <a href="{{ route('admin.trash.update', $admin->id) }}" class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+                                        <a href="{{ route('admin.trash.update', $admin->id) }}" class="btn btn-sm btn-info"></i> Restore</a>
                                         
-                                        {{-- <form class="d-inline delete-form" action="{{ route('permission.destroy', $admin->id) }}" method="POST">
+                                        <form class="d-inline delete-form" action="{{ route('admin-user.destroy', $admin->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                                        </form> --}}
+                                            <button class="btn btn-sm btn-danger">Delete Permanently</button>
+                                        </form>
                                     </td>
                                 </tr>
                                 @endif

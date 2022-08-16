@@ -16,12 +16,27 @@ class AdminController extends Controller {
      */
     public function index() {
 
-        $all_admin = Admin::latest()->get();
+        $all_admin = Admin::latest()->where( 'trash', false )->get();
         $roles     = Role::latest()->get();
         return view( 'admin.pages.user.index', [
             'all_admin' => $all_admin,
             'form_type' => 'create',
             'roles'     => $roles,
+        ] );
+    }
+
+    /**
+     * Trash Users View
+     */
+
+    public function trashUsers() {
+
+        $all_admin = Admin::latest()->where( 'trash', true )->get();
+        // $roles     = Role::latest()->get();
+        return view( 'admin.pages.user.trash', [
+            'all_admin' => $all_admin,
+            'form_type' => 'trash',
+            // 'roles'     => $roles,
         ] );
     }
 
@@ -104,7 +119,9 @@ class AdminController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy( $id ) {
-        //
+        $delete_data = Admin::findOrFail( $id );
+        $delete_data->delete();
+        return back()->with( 'success-main', 'User deleted permanently' );
     }
 
     /**
@@ -125,6 +142,27 @@ class AdminController extends Controller {
         }
 
         return back()->with( 'success-main', 'Status updated successfully' );
+
+    }
+
+    /**
+     * Trash Update
+     */
+
+    public function updateTrash( $id ) {
+        $data = Admin::findOrFail( $id );
+
+        if ( $data->trash ) {
+            $data->update( [
+                'trash' => false,
+            ] );
+        } else {
+            $data->update( [
+                'trash' => true,
+            ] );
+        }
+
+        return back()->with( 'success-main', 'Trash updated successfully' );
 
     }
 

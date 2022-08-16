@@ -27,4 +27,6 @@ Route::group( ['middleware' => 'admin'], function () {
     //user routes
     Route::resource( '/admin-user', AdminController::class );
     Route::get( '/admin-user-status-update/{id}', [AdminController::class, 'updateStatus'] )->name( 'admin.status.update' );
+    Route::get( '/admin-user-trash-update/{id}', [AdminController::class, 'updateTrash'] )->name( 'admin.trash.update' );
+    Route::get( '/admin-user-trash', [AdminController::class, 'trashUsers'] )->name( 'admin.trash' );
 } );
