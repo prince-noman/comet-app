@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Role;
+use App\Notifications\AdminAccountInfoNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -69,7 +70,7 @@ class AdminController extends Controller {
         $pass        = substr( $pass_string, 10, 10 );
 
         //admin user data store
-        Admin::create( [
+        $user = Admin::create( [
             'role_id'  => $request->role,
             'name'     => $request->name,
             'email'    => $request->email,
@@ -77,6 +78,9 @@ class AdminController extends Controller {
             'username' => $request->username,
             'password' => Hash::make( $pass ),
         ] );
+
+        //Mail Notification send with credential
+        $user->notify( new AdminAccountInfoNotification( [$user['name'], $pass] ) );
 
         return back()->with( 'success', 'Admin user created successful' );
     }
