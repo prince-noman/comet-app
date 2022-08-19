@@ -93,6 +93,15 @@ class RoleController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update( Request $request, $id ) {
+
+        //validation
+        $this->validate( $request, [
+            'name'       => ['required'],
+            'permission' => ['required'],
+        ], [
+            'permission.required' => 'You must check at least one permission',
+        ] );
+
         $update_data = Role::findOrFail( $id );
         $update_data->update( [
             'name'        => $request->name,

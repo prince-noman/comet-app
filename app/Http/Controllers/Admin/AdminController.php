@@ -102,7 +102,15 @@ class AdminController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit( $id ) {
-        //
+        $edit_data = Admin::findOrFail( $id );
+        $all_admin = Admin::latest()->where( 'trash', false )->get();
+        $roles     = Role::latest()->get();
+        return view( 'admin.pages.user.index', [
+            'all_admin' => $all_admin,
+            'edit_data' => $edit_data,
+            'form_type' => 'edit',
+            'roles'     => $roles,
+        ] );
     }
 
     /**
@@ -113,7 +121,26 @@ class AdminController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update( Request $request, $id ) {
-        //
+        //Validation
+        $this->validate( $request, [
+            'name'     => ['required'],
+            'email'    => ['required'],
+            'cell'     => ['required'],
+            'username' => ['required'],
+        ] );
+
+        //User Info update
+        $update_data = Admin::findOrFail( $id );
+        $update_data->update( [
+            'role_id'  => $request->role_id,
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'cell'     => $request->cell,
+            'username' => $request->username,
+        ] );
+
+        return back()->with( 'success', 'User data updated successfully.' );
+
     }
 
     /**

@@ -91,6 +91,7 @@
 
                     <div class="form-group">
                        <ul style="list-style: none; padding-left: 0px;">
+                        <label>Permissions</label>
                         @forelse ($permissions as $item)
                         <li>
                             <label for=""><input name="permission[]" value="{{ $item->name }}" type="checkbox">{{ $item->name }}</label>
@@ -129,6 +130,7 @@
                     </div>
 
                     <ul class="list-unstyled">
+                        <label>Permissions</label>
                         @forelse ($permissions as $item)
                         <li>
                             <label for=""><input name="permission[]" @if(in_array($item->name, json_decode($edit->permissions))) checked @endif value="{{ $item->name }}" type="checkbox">{{ $item->name }}</label>

@@ -48,7 +48,7 @@
                                     </td>
                                     <td>
                                         {{-- <a href="" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a> --}}
-                                        <a href="{{ route('permission.edit', $admin->id) }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                        <a href="{{ route('admin-user.edit', $admin->id) }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
                                         <a href="{{ route('admin.trash.update', $admin->id) }}" class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></a>
                                         
                                         {{-- <form class="d-inline delete-form" action="{{ route('permission.destroy', $admin->id) }}" method="POST">
@@ -73,6 +73,7 @@
             </div>
         </div>
     </div>
+
     @if($form_type == 'create')
     <div class="col-md-4">
         <div class="card">
@@ -117,23 +118,47 @@
         </div>
     </div>
     @endif
-    {{-- @if($form_type == 'edit')
+
+    @if($form_type == 'edit')
     <div class="col-md-4">
         <div class="card">
-            <div class="card-header d-flex justify-content-between">
-                <h4 class="card-title">Edit permission</h4>
-                <a href="{{ route('permission.index') }}" class="btn btn-sm btn-info">Back</a>
+            <div class="card-header">
+                <h4 class="card-title">Edit User</h4>
             </div>
             <div class="card-body">
                 @include('validate')
-                <form action="{{ route('permission.update', $edit->id) }}" method="POST">
+                <form action="{{ route('admin-user.update', $edit_data->id) }}" method="POST">
                     @csrf
-                    @method('PATCH')
+                    @method('PUT')
                     <div class="form-group">
                         <label>Name</label>
-                        <input name="name" value="{{ $edit->name }}" type="text" class="form-control">
+                        <input name="name" type="text" class="form-control" value="{{ $edit_data->name }}">
                     </div>
-                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input name="email" type="text" class="form-control" value="{{ $edit_data->email }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input name="username" type="text" class="form-control" value="{{ $edit_data->username }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Cell</label>
+                        <input name="cell" type="text" class="form-control" value="{{ $edit_data->cell }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select name="role_id" id="" class="form-control">
+                            <option value="">--select--</option>
+                            @foreach ($roles as $role)
+                                <option @if ($edit_data->role->id == $role->id) selected @endif value="{{ $role->id }}">{{ $role->name }}</option>
+                                {{-- <option @if ($edit_data->role->id == 1) selected @endif value="{{ $edit_data->role->id }}">Admin</option>
+                                <option @if ($edit_data->role->id == 7) selected @endif value="{{ $edit_data->role->id }}">Author</option>
+                                <option @if ($edit_data->role->id == 5 ) selected @endif value="{{ $edit_data->role->id }}">Editor</option> --}}
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary">Update</button>
                     </div>
@@ -141,7 +166,7 @@
             </div>
         </div>
     </div>
-    @endif --}}
+    @endif
 </div>
 
 @endsection
