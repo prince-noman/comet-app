@@ -7,12 +7,12 @@
                     <span>Main</span>
                 </li>
                 <li> 
-                    <a href="index.html"><i class="fe fe-home"></i> <span>Dashboard</span></a>
+                    <a href="{{ route('admin.dashboard') }}"><i class="fe fe-home"></i> <span>Dashboard</span></a>
                 </li>
 
                 @if (in_array('Slider', json_decode(Auth::guard('admin')->user()->role->permissions)))
                 <li> 
-                    <a href="index.html"><i class="fe fe-vector"></i> <span>Slider</span></a>
+                    <a href="{{ route('slider.index') }}"><i class="fe fe-vector"></i> <span>Slider</span></a>
                 </li>
                 @endif
 
