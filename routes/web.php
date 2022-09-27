@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminPageController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\FrontendPageController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,8 @@ Route::group( ['middleware' => 'admin'], function () {
 
     //Slider Routes
     Route::resource( '/slider', SliderController::class );
+    //Testimonial Routes
+    Route::resource( '/testimonial', TestimonialController::class );
 } );
 
 /**

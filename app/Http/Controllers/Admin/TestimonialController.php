@@ -3,18 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Testimonial;
 use Illuminate\Http\Request;
 
-class TestimonialController extends Controller
-{
+class TestimonialController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index() {
+        $testimonials = Testimonial::latest()->get();
+        return view( 'admin.pages.testimonial.index', [
+            'testimonials' => $testimonials,
+            'form_type'    => 'create',
+        ] );
     }
 
     /**
@@ -22,8 +25,7 @@ class TestimonialController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
@@ -33,9 +35,22 @@ class TestimonialController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store( Request $request ) {
+        //validate
+        $this->validate( $request, [
+            'name'        => ['required'],
+            'company'     => ['required'],
+            'testimonial' => ['required'],
+        ] );
+
+        //data store
+        Testimonial::create( [
+            'name'        => $request->name,
+            'company'     => $request->company,
+            'testimonial' => $request->testimonial,
+        ] );
+
+        return back()->with( 'success', 'Testimonial added successful' );
     }
 
     /**
@@ -44,8 +59,7 @@ class TestimonialController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show( $id ) {
         //
     }
 
@@ -55,8 +69,7 @@ class TestimonialController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit( $id ) {
         //
     }
 
@@ -67,8 +80,7 @@ class TestimonialController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update( Request $request, $id ) {
         //
     }
 
@@ -78,8 +90,7 @@ class TestimonialController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy( $id ) {
         //
     }
 }
