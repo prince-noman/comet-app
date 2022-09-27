@@ -11,12 +11,11 @@ return new class extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create( 'sliders', function ( Blueprint $table ) {
+        Schema::create( 'testimonials', function ( Blueprint $table ) {
             $table->id();
-            $table->string( 'title' )->nullable();
-            $table->string( 'subtitle' )->nullable();
-            $table->string( 'photo' )->nullable();
-            $table->text( 'btns' )->nullable();
+            $table->string( 'testimonial' );
+            $table->string( 'name' );
+            $table->string( 'company' );
             $table->boolean( 'status' )->default( true );
             $table->boolean( 'trash' )->default( false );
             $table->timestamps();
@@ -29,6 +28,6 @@ return new class extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists( 'sliders' );
+        Schema::dropIfExists( 'testimonials' );
     }
 };

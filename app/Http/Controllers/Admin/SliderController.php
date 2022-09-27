@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Slider;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class SliderController extends Controller {
     /**
@@ -12,8 +14,10 @@ class SliderController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
+        $sliders = Slider::latest()->get();
         return view( 'admin.pages.slider.index', [
             'form_type' => 'create',
+            'sliders'   => $sliders,
         ] );
     }
 
@@ -33,7 +37,46 @@ class SliderController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store( Request $request ) {
-        //
+
+        //Validation
+        $this->validate( $request, [
+            'title'    => 'required',
+            'subtitle' => 'required',
+            'photo'    => 'required',
+        ] );
+
+        // btn management
+        $buttons = [];
+
+        for ( $i = 0; $i < count( $request->btn_title ); $i++ ) {
+            array_push( $buttons, [
+                'btn_title' => $request->btn_title[$i],
+                'btn_link'  => $request->btn_link[$i],
+                'btn_type'  => $request->btn_type[$i],
+            ] );
+        }
+
+//slider image manage
+        if ( $request->hasFile( 'photo' ) ) {
+            $img       = $request->file( 'photo' );
+            $file_name = md5( time() . rand() ) . '.' . $img->clientExtension();
+
+            $image = Image::make( $img->getRealPath() );
+            $image->save( storage_path( 'app/public/sliders/' . $file_name ) );
+
+        }
+
+        //add new slide
+        Slider::Create( [
+            'title'    => $request->title,
+            'subtitle' => $request->subtitle,
+            'photo'    => $file_name,
+            'btns'     => json_encode( $buttons ),
+        ] );
+
+        //return back
+        return back()->with( 'success', 'Slide added successfully' );
+
     }
 
     /**
@@ -53,7 +96,13 @@ class SliderController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit( $id ) {
-        //
+        $slider  = Slider::findOrFail( $id );
+        $sliders = Slider::latest()->get();
+        return view( 'admin.pages.slider.index', [
+            'form_type' => 'edit',
+            'sliders'   => $sliders,
+            'item'      => $slider,
+        ] );
     }
 
     /**
@@ -64,7 +113,30 @@ class SliderController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update( Request $request, $id ) {
-        //
+
+        //Get Slider
+        $slider = Slider::findOrFail( $id );
+
+        // btn management
+        $buttons = [];
+
+        for ( $i = 0; $i < count( $request->btn_title ); $i++ ) {
+            array_push( $buttons, [
+                'btn_title' => $request->btn_title[$i],
+                'btn_link'  => $request->btn_link[$i],
+                'btn_type'  => $request->btn_type[$i],
+            ] );
+        }
+
+        //Update Slider
+        $slider->update( [
+            'title'    => $request->title,
+            'subtitle' => $request->subtitle,
+            // 'photo'    => $file_name,
+            'btns'     => json_encode( $buttons ),
+        ] );
+        //return back
+        return back()->with( 'success', 'Slide updated successfully' );
     }
 
     /**
@@ -76,4 +148,5 @@ class SliderController extends Controller {
     public function destroy( $id ) {
         //
     }
+
 }
