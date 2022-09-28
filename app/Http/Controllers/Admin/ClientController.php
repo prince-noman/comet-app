@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class ClientController extends Controller {
     /**
@@ -36,7 +37,30 @@ class ClientController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store( Request $request ) {
-        //
+        //validate
+        $this->validate( $request, [
+            'name' => ['required'],
+            'logo' => ['required'],
+        ] );
+
+//client logo image manage
+        if ( $request->hasFile( 'logo' ) ) {
+            $img       = $request->file( 'logo' );
+            $file_name = md5( time() . rand() ) . '.' . $img->clientExtension();
+
+            $image = Image::make( $img->getRealPath() );
+            $image->save( storage_path( 'app/public/clients/' . $file_name ) );
+
+        }
+
+        //data store
+        Client::create( [
+            'name' => $request->name,
+            'logo' => $file_name,
+        ] );
+
+        return back()->with( 'success', 'Client added successfull' );
+
     }
 
     /**
@@ -79,4 +103,5 @@ class ClientController extends Controller {
     public function destroy( $id ) {
         //
     }
+
 }

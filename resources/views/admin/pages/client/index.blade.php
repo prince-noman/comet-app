@@ -29,7 +29,7 @@
                             <tr>
                              <td>{{ $loop->index + 1 }}</td>
                              <td>{{ $item->name }}</td>
-                             <td>{{ $item->logo }}</td>
+                             <td><img style="width: 60px; object-fit:cover" src="{{ url('storage/clients/'. $item->logo) }}" alt=""></td>
                              <td>{{ $item->created_at->diffForHumans() }}</td>
                              <td>
                                 @if ($item->status)
@@ -67,7 +67,7 @@
             </div>
             <div class="card-body">
                 @include('validate')
-                <form action="{{ route('testimonial.store') }}" method="POST">
+                <form action="{{ route('client.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label>Client Name</label>
@@ -78,7 +78,7 @@
                         <br>
                         <img id="slider-photo-preview" style="max-width: 300px;" src="" alt="">
                         <br>
-                        <input style="display: none" name="photo" type="file" class="form-control" id="slider-photo">
+                        <input style="display: none" name="logo" type="file" class="form-control" id="slider-photo">
                         <label for="slider-photo">
                             <img style="width: 60px; cursor: pointer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Picture_icon_BLACK.svg/1200px-Picture_icon_BLACK.svg.png" alt="">
                         </label>
