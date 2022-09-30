@@ -112,7 +112,13 @@
 
                 @if (in_array('Our Client', json_decode(Auth::guard('admin')->user()->role->permissions))) 
                 <li> 
-                    <a href="index.html"><i class="fe fe-user"></i> <span>Our Client</span></a>
+                    <a href="{{ route('client.index') }}"><i class="fe fe-user"></i> <span>Our Client</span></a>
+                </li>
+                @endif
+
+                @if (in_array('Counter', json_decode(Auth::guard('admin')->user()->role->permissions))) 
+                <li> 
+                    <a href="{{ route('counter.index') }}"><i class="fe fe-user"></i> <span>Counter</span></a>
                 </li>
                 @endif
 

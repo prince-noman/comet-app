@@ -15,4 +15,11 @@ class FrontendPageController extends Controller {
         ] );
     }
 
+    /**
+     * Show Contact Page
+     */
+    public function showContactPage() {
+        return view( 'frontend.pages.contact' );
+    }
+
 }

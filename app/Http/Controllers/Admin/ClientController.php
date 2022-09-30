@@ -80,7 +80,14 @@ class ClientController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit( $id ) {
-        //
+
+        $edit_data = Client::findOrFail( $id );
+        $clients   = Client::latest()->where( 'trash', false )->get();
+        return view( 'admin.pages.client.index', [
+            'clients'   => $clients,
+            'edit_data' => $edit_data,
+            'form_type' => 'edit',
+        ] );
     }
 
     /**
@@ -91,7 +98,27 @@ class ClientController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update( Request $request, $id ) {
-        //
+        //Get Clint
+        $client = Client::findOrFail( $id );
+
+//client logo image manage
+        if ( $request->hasFile( 'logo' ) ) {
+            $img       = $request->file( 'logo' );
+            $file_name = md5( time() . rand() ) . '.' . $img->clientExtension();
+
+            $image = Image::make( $img->getRealPath() );
+            $image->save( storage_path( 'app/public/clients/' . $file_name ) );
+
+        }
+
+        //Update Client
+        $client->update( [
+            'name' => $request->name,
+            'logo' => $file_name,
+        ] );
+
+        //return back
+        return back()->with( 'success', 'Client updated successfully' );
     }
 
     /**
@@ -101,7 +128,9 @@ class ClientController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy( $id ) {
-        //
+        $delete_data = Client::findOrFail( $id );
+        $delete_data->delete();
+        return back()->with( 'success-main', 'Client deleted permanently' );
     }
 
 }

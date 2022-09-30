@@ -35,15 +35,20 @@
                                 @if ($item->status)
                                 <span class="badge badge-success">Published</span>
                                 {{-- <a href="{{ route('slider.status.update', $slider->id) }}" class="text-danger"><i class="fa fa-times"></i></a> --}}
-                            @else
+                                @else
                                 <span class="badge badge-danger">Unpublished</span>
                                 {{-- <a href="{{ route('slider.status.update', $slider->id) }}" class="text-success"><i class="fa fa-check"></i></a> --}}
-                            @endif
+                                @endif
                             </td>
                             <td>
-                                <a href="{{ route('testimonial.edit', $item->id) }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                <a href="{{ route('client.edit', $item->id) }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
                                 {{-- <a href="{{ route('slider.trash.update', $slider->id) }}" class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></a> --}}
-                                <a href="" class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+                                {{-- <a href="{{ route('client.destroy', $item->id) }}" class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></a> --}}
+                                <form class="d-inline delete-form" action="{{ route('client.destroy', $item->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                                </form>
                             </td>
                             </tr>
                         @empty
@@ -77,6 +82,45 @@
                         <label>Logo</label> 
                         <br>
                         <img id="slider-photo-preview" style="max-width: 300px;" src="" alt="">
+                        <br>
+                        <input style="display: none" name="logo" type="file" class="form-control" id="slider-photo">
+                        <label for="slider-photo">
+                            <img style="width: 60px; cursor: pointer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Picture_icon_BLACK.svg/1200px-Picture_icon_BLACK.svg.png" alt="">
+                        </label>
+                    </div>
+                    
+                    
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endif
+
+
+
+    @if($form_type == 'edit')
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Edit Client</h4>
+            </div>
+            <div class="card-body">
+                @include('validate')
+                <form action="{{ route('client.update', $edit_data->id ) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group">
+                        <label>Client Name</label>
+                        <input name="name" value="{{ $edit_data->name }}" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Logo</label> 
+                        <br>
+                        <img id="slider-photo-preview" style="max-width: 300px;" src="{{ url('storage/clients/'.$edit_data->logo) }}" alt="">
                         <br>
                         <input style="display: none" name="logo" type="file" class="form-control" id="slider-photo">
                         <label for="slider-photo">

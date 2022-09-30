@@ -45,5 +45,18 @@
         $(document).on("click", ".remove-btn", function () {
             $(this).closest(".btn-opt-area").remove();
         });
+
+        //show icon
+        $("button.show-icon").click(function (e) {
+            e.preventDefault();
+            $("#select-icon").modal("show");
+        });
+
+        //select icon
+        $(".select-icon .preview-icon code").click(function () {
+            let icon_name = $(this).html();
+            $(".select-icon-input").val(icon_name);
+            $("#select-icon").modal("hide");
+        });
     });
 })(jQuery);
